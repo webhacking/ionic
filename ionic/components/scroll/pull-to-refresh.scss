@@ -1,4 +1,12 @@
-// Scroll refresher (for pull to refresh)
+@import "../../globals.core";
+
+// Pull to Refresh
+// --------------------------------------------------
+
+$pull-to-refresh-content-color:      #000 !default;
+$pull-to-refresh-content-font-size:  30px !default;
+$pull-to-refresh-icon-font-size:     16px !default;
+
 ion-refresher {
   position: absolute;
   top: -60px;
@@ -7,20 +15,20 @@ ion-refresher {
   overflow: hidden;
   margin: auto;
   height: 60px;
+
   .refresher-content {
     position: absolute;
     bottom: 15px;
     left: 0;
     width: 100%;
-    color: #000;//$scroll-refresh-icon-color;
+    color: $pull-to-refresh-content-color;
     text-align: center;
-
-    font-size: 30px;
+    font-size: $pull-to-refresh-content-font-size;
 
     .text-refreshing,
     .text-pulling {
-      font-size: 16px;
-      line-height: 16px;
+      font-size: $pull-to-refresh-icon-font-size;
+      line-height: $pull-to-refresh-icon-font-size;
     }
     &.refresher-with-text {
       bottom: 10px;
@@ -74,14 +82,10 @@ ion-refresher {
     }
   }
 }
+
 scroll-content.overscroll {
   overflow: visible;
 }
-/*
-  -webkit-overflow-scrolling:touch;
-  width:100%;
-}
-*/
 
 @-webkit-keyframes refresh-spin {
   0%   { -webkit-transform: translate3d(0,0,0) rotate(0); }

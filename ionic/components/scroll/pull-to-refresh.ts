@@ -56,8 +56,9 @@ import {raf, ready, CSS} from '../../util/dom';
   selector: 'ion-refresher',
   host: {
     '[class.active]': 'isActive',
+    '[class.invisible]': 'isInvisible',
     '[class.refreshing]': 'isRefreshing',
-    '[class.refreshingTail]': 'isRefreshingTail'
+    '[class.refreshing-tail]': 'isRefreshingTail'
   },
   template:
     '<div class="refresher-content" [class.refresher-with-text]="pullingText || refreshingText">' +
@@ -83,6 +84,11 @@ export class Refresher {
    * @private
    */
   isActive: boolean;
+  
+  /**
+   * @private
+   */
+  isInvisible: boolean;
 
   /**
    * @private
@@ -107,7 +113,7 @@ export class Refresher {
   /**
    * @private
    */
-  ptrThreshold: number = 0;
+  ptrThreshold: number;
 
   /**
    * @private
@@ -242,6 +248,8 @@ export class Refresher {
     sc.addEventListener('touchmove', this._touchMoveListener);
     sc.addEventListener('touchend', this._touchEndListener);
     sc.addEventListener('scroll', this._handleScrollListener);
+    
+    this.ptrThreshold = this._ele.offsetHeight;
   }
 
   /**
@@ -303,7 +311,6 @@ export class Refresher {
    * @private
    */
   activate() {
-    //this.ele.classList.add('active');
     this.isActive = true;
     this.start.emit(this);
   }
@@ -332,27 +339,24 @@ export class Refresher {
   }
 
   /**
-   * @private
+   * @private showCallback
    */
   show() {
-    // showCallback
-    this._ele.classList.remove('invisible');
+    this.isInvisible = false;
   }
 
   /**
-   * @private
+   * @private hideCallback
    */
   hide() {
-    // showCallback
-    this._ele.classList.add('invisible');
+    this.isInvisible = true;    
   }
 
   /**
-   * @private
+   * @private tailCallback
    */
   tail() {
-    // tailCallback
-    this._ele.classList.add('refreshing-tail');
+    this.isRefreshingTail = true;
   }
 
   /**

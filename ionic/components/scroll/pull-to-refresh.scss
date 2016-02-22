@@ -3,35 +3,41 @@
 // Pull to Refresh
 // --------------------------------------------------
 
-$pull-to-refresh-content-color:      #000 !default;
-$pull-to-refresh-content-font-size:  30px !default;
-$pull-to-refresh-icon-font-size:     16px !default;
+$pull-to-refresh-height:             60px !default;
+
+$pull-to-refresh-text-color:         #000 !default;
+$pull-to-refresh-text-font-size:     16px !default;
+
+$pull-to-refresh-icon-color:         #000 !default;
+$pull-to-refresh-icon-font-size:     30px !default;
 
 ion-refresher {
   position: absolute;
-  top: -60px;
+  top: -$pull-to-refresh-height;
   right: 0;
   left: 0;
   overflow: hidden;
   margin: auto;
-  height: 60px;
+  height: $pull-to-refresh-height;
 
   .refresher-content {
     position: absolute;
-    bottom: 15px;
+    top: 11px;
     left: 0;
     width: 100%;
-    color: $pull-to-refresh-content-color;
+    color: $pull-to-refresh-icon-color;
     text-align: center;
-    font-size: $pull-to-refresh-content-font-size;
+    font-size: $pull-to-refresh-icon-font-size;
 
     .text-refreshing,
     .text-pulling {
-      font-size: $pull-to-refresh-icon-font-size;
-      line-height: $pull-to-refresh-icon-font-size;
+      color: $pull-to-refresh-text-color;
+      font-size: $pull-to-refresh-text-font-size;
+      line-height: $pull-to-refresh-text-font-size;
     }
+    
     &.refresher-with-text {
-      bottom: 10px;
+      top: 2px;
     }
   }
 

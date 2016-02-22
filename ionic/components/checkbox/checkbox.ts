@@ -1,4 +1,4 @@
-import {Component, Optional, Input, HostListener, Provider, forwardRef} from 'angular2/core';
+import {Component, Optional, Input, Output, EventEmitter, HostListener, Provider, forwardRef} from 'angular2/core';
 import {NG_VALUE_ACCESSOR} from 'angular2/common';
 
 import {Form} from '../../util/form';
@@ -62,8 +62,8 @@ const CHECKBOX_VALUE_ACCESSOR = new Provider(
   providers: [CHECKBOX_VALUE_ACCESSOR]
 })
 export class Checkbox {
-  private _checked: any = false;
-  private _disabled: any = false;
+  private _checked: boolean = false;
+  private _disabled: boolean = false;
   private _labelId: string;
   private _fn: Function;
 
@@ -71,6 +71,11 @@ export class Checkbox {
    * @private
    */
   id: string;
+
+  /**
+   * @output {Checkbox} expression to evaluate when the checkbox value changes
+   */
+  @Output() change: EventEmitter<Checkbox> = new EventEmitter();
 
   constructor(
     private _form: Form,
@@ -100,11 +105,11 @@ export class Checkbox {
    * @input {boolean} whether or not the checkbox is checked (defaults to false)
    */
   @Input()
-  get checked() {
+  get checked(): boolean {
     return this._checked;
   }
 
-  set checked(val) {
+  set checked(val: boolean) {
     this._setChecked(isTrueProperty(val));
     this.onChange(this._checked);
   }
@@ -113,8 +118,11 @@ export class Checkbox {
    * @private
    */
   private _setChecked(isChecked: boolean) {
-    this._checked = isChecked;
-    this._item && this._item.setCssClass('item-checkbox-checked', isChecked);
+    if (isChecked !== this._checked) {
+      this._checked = isChecked;
+      this.change.emit(this);
+      this._item && this._item.setCssClass('item-checkbox-checked', isChecked);
+    }
   }
 
   /**
@@ -146,11 +154,11 @@ export class Checkbox {
    * @input {boolean} whether or not the checkbox is disabled or not.
    */
   @Input()
-  get disabled(): any {
+  get disabled(): boolean {
     return this._disabled;
   }
 
-  set disabled(val: any) {
+  set disabled(val: boolean) {
     this._disabled = isTrueProperty(val);
     this._item && this._item.setCssClass('item-checkbox-disabled', this._disabled);
   }
@@ -158,7 +166,12 @@ export class Checkbox {
   /**
    * @private
    */
-  onChange(_) {}
+  onChange(isChecked: boolean) {
+    // used when this input does not have an ngModel or ngControl
+    console.debug('checkbox, onChange (no ngModel)', isChecked);
+    this._setChecked(isChecked);
+    this.onTouched();
+  }
 
   /**
    * @private

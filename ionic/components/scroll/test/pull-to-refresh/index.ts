@@ -16,14 +16,14 @@ class E2EApp {
   doRefresh(refresher) {
     console.log('Doing Refresh', refresher)
 
-    // Add to the top of the list on refresh
-    let firstIndex = this.items[0].index - 1;
-
-    for(let i = firstIndex; i > firstIndex - 5; i--) {
-      this.items.unshift({ "index": i });
-    }
-
     setTimeout(() => {
+      // Add to the top of the list on refresh
+      let firstIndex = this.items[0].index - 1;
+          
+      for(let i = firstIndex; i > firstIndex - 5; i--) {
+        this.items.unshift({ "index": i });
+      }      
+      
       refresher.complete();
       console.log("Complete");
     }, 5000);

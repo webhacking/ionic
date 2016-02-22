@@ -18,9 +18,15 @@ import {raf, ready, CSS} from '../../util/dom';
  *  @usage
  *  ```html
  *  <ion-content>
- *    <ion-refresher (start)="doStart($event)"
- *                   (refresh)="doRefresh($event)"
- *                   (pulling)="doPulling($event)">
+ * 
+ *    <ion-refresher
+ *      (start)="doStart($event)"
+ *      (refresh)="doRefresh($event)"
+ *      (pulling)="doPulling($event)"
+ *      pullingIcon="heart"
+ *      pullingText="release to refresh..."
+ *      refreshingIcon="star"
+ *      refreshingText="refreshing...">
  *    </ion-refresher>
  *
  *  </ion-content>
@@ -55,6 +61,7 @@ import {raf, ready, CSS} from '../../util/dom';
 @Component({
   selector: 'ion-refresher',
   host: {
+    '[class.content]': 'true',
     '[class.active]': 'isActive',
     '[class.invisible]': 'isInvisible',
     '[class.refreshing]': 'isRefreshing',
@@ -84,7 +91,7 @@ export class Refresher {
    * @private
    */
   isActive: boolean;
-  
+
   /**
    * @private
    */
@@ -218,7 +225,6 @@ export class Refresher {
     _element: ElementRef
   ) {
     this._ele = _element.nativeElement;
-    this._ele.classList.add('content');
   }
 
   /**
@@ -248,7 +254,7 @@ export class Refresher {
     sc.addEventListener('touchmove', this._touchMoveListener);
     sc.addEventListener('touchend', this._touchEndListener);
     sc.addEventListener('scroll', this._handleScrollListener);
-    
+
     this.ptrThreshold = this._ele.offsetHeight;
   }
 
@@ -349,7 +355,7 @@ export class Refresher {
    * @private hideCallback
    */
   hide() {
-    this.isInvisible = true;    
+    this.isInvisible = true;
   }
 
   /**
@@ -509,10 +515,12 @@ export class Refresher {
    */
   _handleTouchEnd(e) {
     console.debug('TOUCHEND', e);
+
     // if this wasn't an overscroll, get out immediately
     if (!this.canOverscroll && !this.isDragging) {
       return;
     }
+
     // reset Y
     this.startY = null;
     // the user has overscrolled but went back to native scrolling
@@ -533,6 +541,7 @@ export class Refresher {
       } else {
         this.scrollTo(0, this.scrollTime, this.deactivate.bind(this));
         this.isOverscrolling = false;
+        this.setScrollLock(false);        
       }
     }
   }
